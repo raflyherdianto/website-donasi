@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulir Donasi Buku</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- NAVBAR -->
+  <nav class="bg-white shadow-md px-8 py-4 flex justify-between items-center sticky top-0 z-40">
+    <div class="flex items-center space-x-4">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="w-10 h-10">
+      <span class="text-xl font-bold text-blue-700">Kabupaten Lumajang</span>
+    </div>
+    <div>
+      {% if session.get('user_id') %}
+      <span class="text-sm text-gray-600 mr-4">Halo, {{ session['nama'] }}</span>
+      <a href="{{ url_for('main.logout') }}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm">Logout</a>
+      {% else %}
+      <a href="{{ url_for('main.login') }}" class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 text-sm font-semibold transition">Login</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- ISI UTAMA -->
+  <main class="flex-grow px-4 sm:px-8 py-10 flex justify-center">
+    <div class="w-full max-w-5xl bg-white p-10 shadow-xl rounded-xl">
+
+      <!-- Header -->
+      <div class="flex flex-col md:flex-row items-center mb-6 gap-4">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="w-24 h-24">
+        <div class="text-center md:text-left">
+          <h1 class="text-2xl font-bold text-gray-800 leading-snug">
+            DINAS KEARSIPAN DAN PERPUSTAKAAN<br>KABUPATEN LUMAJANG
+          </h1>
+          <p class="text-sm text-gray-600 italic mt-1">
+            Bersama kita wujudkan pemerataan literasi di seluruh pelosok desa Kabupaten Lumajang melalui donasi buku yang bermanfaat dan tepat sasaran.
+          </p>
+        </div>
+      </div>
+
+      <hr class="border-t-2 border-gray-300 my-6">
+
+      <!-- Judul Formulir -->
+      <h2 class="text-3xl font-semibold text-center text-blue-800 mb-8">Formulir Donasi Buku</h2>
+
+      <!-- Formulir -->
+      <form action="{{ url_for('main.formulir_donasi') }}" method="POST">
+        <!-- Nama -->
+        <div class="mb-4">
+          <label class="block text-sm font-semibold text-gray-700">Nama Donatur</label>
+          <input type="text" name="nama" value="{{ user.full_name }}" readonly class="w-full px-4 py-3 border rounded-lg bg-gray-50" />
+        </div>
+
+        <!-- Email -->
+        <div class="mb-4">
+          <label class="block text-sm font-semibold text-gray-700">Email</label>
+          <input type="email" name="email" value="{{ user.email }}" required class="w-full px-4 py-3 border rounded-lg bg-gray-50" />
+        </div>
+
+        <!-- WhatsApp -->
+        <div class="mb-4">
+          <label class="block text-sm font-semibold text-gray-700">Nomor WhatsApp</label>
+          <input type="text" name="whatsapp" placeholder="081234567890" required class="w-full px-4 py-3 border rounded-lg bg-gray-50" />
+        </div>
+
+        <!-- Subjek Buku -->
+        <div class="mb-6">
+          <label class="block text-sm font-semibold text-gray-700 text-center mb-3">Subjek Buku dan Jumlah</label>
+          <div id="subjek-container" class="space-y-3">
+            <div class="bg-gray-50 p-4 rounded border flex flex-col md:flex-row md:items-center gap-4">
+              <select name="subjek_buku[]" required class="select-subjek w-full md:w-3/5 px-4 py-2 border rounded">
+                <option value="">-- Pilih Subjek --</option>
+                <option value="Novel">Novel</option>
+                <option value="Matematika">Matematika</option>
+                <option value="Sains">Sains</option>
+                <option value="Agama">Agama</option>
+                <option value="Bahasa">Bahasa</option>
+                <option value="Teknologi">Teknologi</option>
+                <option value="Dongeng">Dongeng</option>
+                <option value="Resep Masakan">Resep Masakan</option>
+                <option value="Prakarya">Prakarya</option>
+                <option value="Sejarah">Sejarah</option>
+                <option value="Majalah">Majalah</option>
+                <option value="Kamus">Kamus</option>
+                <option value="Peta">Peta</option>
+                <option value="Alam Semesta">Alam Semesta</option>
+                <option value="Luar Angkasa">Luar Angkasa</option>
+                <option value="Planet">Planet</option>
+                <option value="Psikologi">Psikologi</option>
+                <option value="Filsafat">Filsafat</option>
+                <option value="Ilmu Sosial">Ilmu Sosial</option>
+                <option value="Ilmu Pengetahuan">Ilmu Pengetahuan</option>
+                <option value="Seni">Seni</option>
+                <option value="Olahraga">Olahraga</option>
+                <option value="Sastra">Sastra</option>
+                <option value="Geografi">Geografi</option>
+                <option value="Biografi">Biografi</option>
+              </select>
+              <input type="number" name="jumlah[]" placeholder="Jumlah" required class="w-full md:w-1/4 px-4 py-2 border rounded" />
+            </div>
+          </div>
+          <div class="text-center mt-3">
+            <button type="button" onclick="tambahSubjek()" class="text-sm text-blue-600 hover:underline">+ Tambah Subjek</button>
+          </div>
+        </div>
+
+        <!-- Hidden Metode Pengiriman -->
+        <input type="hidden" name="metode_pengiriman" value="Mandiri">
+
+        <!-- Catatan -->
+        <div class="mb-4">
+          <label class="block text-sm font-semibold text-gray-700">Catatan Tambahan</label>
+          <textarea name="catatan" class="w-full px-4 py-3 border rounded-lg bg-gray-100" placeholder="(Opsional) Tulis catatan tambahan..."></textarea>
+        </div>
+
+        <!-- Persetujuan -->
+        <div class="mb-4">
+          <label class="inline-flex items-start">
+            <input type="checkbox" name="setuju_syarat" required class="form-checkbox mt-1 text-blue-600">
+            <span class="ml-2 text-sm text-gray-700 leading-snug">
+              Saya menyetujui <a href="{{ url_for('main.syarat') }}" class="text-blue-600 underline">Syarat & Ketentuan Donasi</a> *
+            </span>
+          </label>
+        </div>
+
+        <div class="mb-6">
+          <label class="inline-flex items-start">
+            <input type="checkbox" name="setuju_pengiriman" required class="form-checkbox mt-1 text-blue-600">
+            <span class="ml-2 text-sm text-gray-700 leading-snug">
+              Saya menyetujui melakukan <strong>Pengiriman Mandiri</strong> ke alamat yang ditentukan *
+            </span>
+          </label>
+        </div>
+
+        <!-- Tombol Submit -->
+        <div class="text-center">
+          <button type="submit" class="bg-green-600 text-white px-8 py-3 rounded-lg shadow hover:bg-green-700 text-lg font-semibold">
+            Selanjutnya
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </main>
+
+  <!-- SCRIPT Tambah, Hapus, dan Select Autocomplete -->
+  <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+  <script>
+    function tambahSubjek() {
+      const container = document.getElementById("subjek-container");
+      const div = document.createElement("div");
+      div.className = "bg-gray-50 p-4 rounded border flex flex-col md:flex-row md:items-center gap-4";
+
+      div.innerHTML = `
+        <select name="subjek_buku[]" required class="select-subjek w-full md:w-3/5 px-4 py-2 border rounded">
+          <option value="">-- Pilih Subjek --</option>
+          <option value="Novel">Novel</option>
+          <option value="Matematika">Matematika</option>
+          <option value="Sains">Sains</option>
+          <option value="Agama">Agama</option>
+          <option value="Bahasa">Bahasa</option>
+          <option value="Teknologi">Teknologi</option>
+          <option value="Dongeng">Dongeng</option>
+          <option value="Resep Masakan">Resep Masakan</option>
+          <option value="Prakarya">Prakarya</option>
+          <option value="Sejarah">Sejarah</option>
+          <option value="Majalah">Majalah</option>
+          <option value="Kamus">Kamus</option>
+          <option value="Peta">Peta</option>
+          <option value="Alam Semesta">Alam Semesta</option>
+          <option value="Luar Angkasa">Luar Angkasa</option>
+          <option value="Planet">Planet</option>
+          <option value="Psikologi">Psikologi</option>
+          <option value="Filsafat">Filsafat</option>
+          <option value="Ilmu Sosial">Ilmu Sosial</option>
+          <option value="Ilmu Pengetahuan">Ilmu Pengetahuan</option>
+          <option value="Seni">Seni</option>
+          <option value="Olahraga">Olahraga</option>
+          <option value="Sastra">Sastra</option>
+          <option value="Geografi">Geografi</option>
+          <option value="Biografi">Biografi</option>
+        </select>
+        <input type="number" name="jumlah[]" placeholder="Jumlah" required class="w-full md:w-1/4 px-4 py-2 border rounded" />
+        <button type="button" onclick="hapusSubjek(this)" class="text-red-500 hover:text-red-700 font-semibold text-sm">
+          <img src="{{ url_for('static', filename='images/trash.png') }}" alt="Hapus" class="w-4 h-4 inline-block">
+        </button>
+      `;
+
+      container.appendChild(div);
+      new TomSelect(div.querySelector('.select-subjek'));
+    }
+
+    function hapusSubjek(button) {
+      const div = button.parentElement;
+      div.remove();
+    }
+
+    // Inisialisasi TomSelect
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll('.select-subjek').forEach(function (el) {
+        new TomSelect(el);
+      });
+    });
+  </script>
+</body>
+</html>

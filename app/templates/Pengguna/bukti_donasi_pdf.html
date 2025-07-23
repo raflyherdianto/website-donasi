@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Bukti Donasi Buku</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 40px;
+      color: #333;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #000;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+    .header img {
+      width: 80px;
+    }
+    .header h1 {
+      margin: 10px 0 5px;
+      font-size: 20px;
+    }
+    .header p {
+      margin: 0;
+      font-size: 14px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      text-decoration: underline;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table, th, td {
+      border: 1px solid #444;
+    }
+    th, td {
+      padding: 8px;
+      font-size: 14px;
+      text-align: left;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+    }
+    .ttd {
+      margin-top: 60px;
+      text-align: right;
+      font-size: 14px;
+    }
+    .ttd p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+    <h1>DINAS KEARSIPAN DAN PERPUSTAKAAN<br>KABUPATEN LUMAJANG</h1>
+    <p>Jl. Hayam Wuruk No.1, Kepuharjo, Lumajang, Jawa Timur</p>
+  </div>
+
+  <h2 style="text-align:center;">BUKTI DONASI BUKU</h2>
+  <p><strong>Nomor Donasi:</strong> {{ nomor_donasi }}</p>
+  <p><strong>Tanggal Donasi:</strong> {{ donasi.tanggal.strftime('%d %B %Y') }}</p>
+
+  <div class="section-title">Data Donatur</div>
+  <table>
+    <tr><th>Nama</th><td>{{ donasi.nama }}</td></tr>
+    <tr><th>Email</th><td>{{ donasi.email }}</td></tr>
+    <tr><th>No. WhatsApp</th><td>{{ donasi.whatsapp }}</td></tr>
+    <tr><th>Metode Pengiriman</th><td>{{ donasi.metode }}</td></tr>
+    <tr><th>Catatan</th><td>{{ donasi.catatan or '-' }}</td></tr>
+  </table>
+
+  <div class="section-title">Rincian Buku yang Didonasikan</div>
+  <table>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Subjek Buku</th>
+        <th>Jumlah</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in detail_buku %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ item.subjek_buku }}</td>
+        <td>{{ item.jumlah }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="section-title">Informasi Pengiriman</div>
+  <table>
+    <tr><th>Tanggal Pengiriman</th><td>{{ bukti.tanggal_pengiriman.strftime('%d %B %Y') }}</td></tr>
+    <tr>
+      <th>Bukti Resi</th>
+      <td>
+        {% if bukti.bukti_resi %}
+          <img src="{{ url_for('static', filename='uploads/resi/' + bukti.bukti_resi) }}" alt="Resi" style="max-height: 200px;">
+        {% else %}
+          Tidak tersedia
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+
+  <div class="footer">
+    <p>Terima kasih atas partisipasi Anda dalam mendukung literasi di Kabupaten Lumajang.</p>
+    <p>Buku yang Anda donasikan akan segera kami distribusikan ke perpustakaan desa yang membutuhkan.</p>
+  </div>
+
+  <div class="ttd">
+    <p>Lumajang, {{ bukti.tanggal_pengiriman.strftime('%d %B %Y') }}</p>
+    <p><strong>Kepala Dinas Kearsipan dan Perpustakaan</strong></p>
+    <br><br><br>
+    <p><u>(........................................)</u></p>
+  </div>
+
+</body>
+</html>

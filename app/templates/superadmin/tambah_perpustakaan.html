@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Tambah Perpustakaan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-800 text-white px-6 py-4 flex justify-between items-center shadow-lg">
+        <h1 class="text-xl font-bold">Donasi Buku Lumajang</h1>
+        <a href="/logout" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded">Logout</a>
+    </nav>
+
+    <div class="flex min-h-screen">
+
+        <!-- Sidebar -->
+        <aside class="w-72 bg-gray-900 text-white p-6">
+            <h2 class="text-xl font-semibold mb-4">Super Admin</h2>
+            <nav class="space-y-2">
+                <a href="/superadmin/dashboard" class="block hover:bg-blue-600 px-4 py-2 rounded">Dashboard</a>
+                <div>
+                    <p class="px-4 py-2">Manajemen Perpustakaan</p>
+                    <div class="ml-4 space-y-1">
+                        <a href="/tambah-perpustakaan" class="block px-4 py-1 bg-blue-700 rounded">Tambah Perpustakaan</a>
+                        <a href="/superadmin/perpusdes" class="block px-4 py-1 hover:bg-blue-500 rounded">Daftar Perpustakaan</a>
+                        <a href="/superadmin/verifikasi-admin" class="block px-4 py-1 hover:bg-blue-500 rounded">Verifikasi Admin</a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Form Tambah Perpustakaan</h2>
+
+            <form method="POST" class="bg-white p-6 rounded shadow-md space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nama Perpustakaan</label>
+                    <input type="text" name="nama_perpus" class="mt-1 block w-full border border-gray-300 rounded p-2" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Kecamatan</label>
+                    <input type="text" name="kecamatan" class="mt-1 block w-full border border-gray-300 rounded p-2" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Desa</label>
+                    <input type="text" name="desa" class="mt-1 block w-full border border-gray-300 rounded p-2" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" name="username" class="mt-1 block w-full border border-gray-300 rounded p-2" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" name="password" class="mt-1 block w-full border border-gray-300 rounded p-2" required>
+                </div>
+                <div>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
+                </div>
+            </form>
+
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class="mt-4 bg-green-100 text-green-800 px-4 py-2 rounded">
+                  {{ messages[0] }}
+                </div>
+              {% endif %}
+            {% endwith %}
+        </main>
+    </div>
+</body>
+</html>

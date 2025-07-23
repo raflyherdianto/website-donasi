@@ -1,0 +1,69 @@
+<!-- templates/superadmin/verifikasi_admin.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Verifikasi Admin Perpustakaan</title>
+    <script src="https://cdn.tailwindcss.com "></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-800 text-white px-6 py-4 flex justify-between items-center shadow-lg">
+        <h1 class="text-xl font-bold">Donasi Buku Lumajang</h1>
+        <div>
+            <span class="mr-4">Super Admin</span>
+            <a href="/logout" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded">Logout</a>
+        </div>
+    </nav>
+
+    <div class="flex min-h-screen">
+
+        <!-- Sidebar -->
+        <aside class="w-72 h-screen bg-gray-900 text-white shadow-lg fixed top-0 left-0 overflow-y-auto">
+            <div class="p-6 border-b border-gray-800 text-center">
+                <img src="{{ url_for('static', filename='images/logo_asetkita.png') }}" alt="Logo AsetKita" class="w-20 mx-auto mb-4">
+                <h2 class="text-2xl font-bold">Super Admin</h2>
+            </div>
+            <nav class="p-4 space-y-4 text-sm">
+                <a href="/superadmin/dashboard" class="block px-4 py-2 rounded hover:bg-blue-600">Dashboard</a>
+                <a href="/superadmin/verifikasi-admin" class="block px-4 py-2 rounded bg-blue-700">Verifikasi Admin</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 ml-72 p-8 bg-gray-100">
+            <h2 class="text-3xl font-semibold text-gray-800 mb-6">Verifikasi Admin Perpustakaan</h2>
+
+            {% if daftar_admin %}
+                <div class="bg-white p-6 rounded shadow-md overflow-x-auto">
+                    <table class="min-w-full table-auto">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-4 py-2 text-left">Nama Admin</th>
+                                <th class="px-4 py-2 text-left">Email</th>
+                                <th class="px-4 py-2 text-left">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for admin in daftar_admin %}
+                                <tr class="border-b">
+                                    <td class="px-4 py-2">{{ admin.full_name }}</td>
+                                    <td class="px-4 py-2">{{ admin.email }}</td>
+                                    <td class="px-4 py-2">
+                                        <a href="{{ url_for('verifikasi_admin_proses', admin_id=admin.id) }}" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">Verifikasi</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="bg-white p-6 rounded shadow-md text-center text-gray-500">
+                    <p>Tidak ada admin yang menunggu verifikasi.</p>
+                </div>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>

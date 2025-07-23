@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}
+Kontak Kami - Donasi Buku Lumajang
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto bg-white rounded-xl px-6 py-10 my-3 shadow-md">
+    <h1 class="text-center text-2xl font-bold mb-6 text-gray-700">HUBUNGI KAMI</h1>
+
+    <div class="flex flex-col md:flex-row gap-10">
+        <!-- Kolom Kiri: Informasi Kontak -->
+        <div class="w-full md:w-1/2 space-y-4">
+            <div>
+                <h2 class="text-xl font-bold text-gray-700">Alamat:</h2>
+                <p class="text-gray-600">Jl. Alun-Alun Barat No. 1 Lumajang;<br>Bidang Kearsipan: Jl. Hayam Wuruk No. 1 Kepuharjo, Kec. Lumajang 67313</p>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-bold text-gray-700">Telepon:</h2>
+                <a href="tel:+6285198151513" class="text-blue-600 hover:underline">0851-9815-1513</a>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-bold text-gray-700">Email:</h2>
+                <a href="mailto:arsip.perpustakaan@lumajangkab.go.id" class="text-blue-600 hover:underline">arsip.perpustakaan@lumajangkab.go.id</a>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-bold text-gray-700">Media Sosial:</h2>
+                <div class="flex space-x-4 mt-2">
+                    <a href="https://wa.me/085198151513" target="_blank">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-8 h-8">
+                    </a>
+                    <a href="https://www.instagram.com/disarpuslumajang/" target="_blank">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" class="w-8 h-8">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kolom Kanan: Peta -->
+        <div class="w-full md:w-1/2">
+            <div class="rounded-lg overflow-hidden shadow">
+                <iframe 
+                    width="100%" 
+                    height="350" 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d391.8564570574972!2d113.22303963532292!3d-8.135508127764918!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6678eb5913747%3A0x81cc5a025e1a437e!2sKantor%20Perpustakaan%20dan%20Arsip%20Kabupaten%20Lumajang!5e0!3m2!1sid!2sid!4v1750857350076!5m2!1sid!2sid" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    style="border:0;" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

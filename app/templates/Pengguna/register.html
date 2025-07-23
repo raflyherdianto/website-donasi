@@ -1,0 +1,42 @@
+<!-- templates/register.html -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Buat Akun</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-blue-200 min-h-screen flex items-center justify-center">
+
+<div class="bg-white p-6 rounded shadow-md w-full max-w-md text-center">
+    <h2 class="text-2xl font-bold mb-4">Buat Akun Baru</h2>
+
+    <form action="/register" method="POST">
+        <div class="mb-4">
+            <label for="full_name" class="block text-left font-semibold mb-2">Nama Lengkap*</label>
+            <input type="text" name="full_name" required class="w-full border p-2 rounded">
+        </div>
+        <div class="mb-4">
+            <label for="phone_number" class="block text-left font-semibold mb-2">Nomor HP*</label>
+            <input type="tel" name="phone_number" required class="w-full border p-2 rounded">
+        </div>
+        <div class="mb-4">
+            <label for="email" class="block text-left font-semibold mb-2">Email*</label>
+            <input type="email" name="email" required class="w-full border p-2 rounded">
+        </div>
+        <div class="mb-4">
+            <label for="password" class="block text-left font-semibold mb-2">Kata Sandi*</label>
+            <input type="password" name="password" required class="w-full border p-2 rounded">
+        </div>
+        <div class="mb-4 text-left">
+            <input type="checkbox" id="terms" name="terms" required>
+            <label for="terms"> Saya setujui <a href="#" class="text-blue-500 underline">Syarat & Ketentuan</a></label>
+        </div>
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
+            Daftar Sekarang
+        </button>
+    </form>
+</div>
+
+</body>
+</html>

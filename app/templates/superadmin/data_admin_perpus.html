@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Admin Perpustakaan Desa</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="p-6 font-sans">
+    <h1 class="text-xl font-bold mb-4">📚 Daftar Admin Perpustakaan Desa</h1>
+
+    <table class="w-full border border-gray-300">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="p-2 border">No</th>
+                <th class="p-2 border">Nama Perpustakaan</th>
+                <th class="p-2 border">Desa</th>
+                <th class="p-2 border">Kecamatan</th>
+                <th class="p-2 border">Username</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for admin in data_admin %}
+            <tr>
+                <td class="p-2 border">{{ loop.index }}</td>
+                <td class="p-2 border">{{ admin.nama_perpus }}</td>
+                <td class="p-2 border">{{ admin.desa }}</td>
+                <td class="p-2 border">{{ admin.kecamatan }}</td>
+                <td class="p-2 border">{{ admin.username }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

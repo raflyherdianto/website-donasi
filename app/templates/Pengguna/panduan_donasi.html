@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Panduan Donasi - PerpusDes Lumajang</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+/* Perbaikan Dropdown */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 180px;
+  z-index: 50;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.5rem 0;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 8px 16px;
+  font-size: 16px; /* Ubah dari 14px menjadi 16px */
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover {
+  background-color: #f0f4ff;
+  color: #1d4ed8;
+}
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+
+<!-- NAVBAR -->
+<nav class="bg-blue-200 shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-40">
+  <div class="flex items-center space-x-3">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Kabupaten Lumajang" class="w-10 h-10">
+    <span class="text-xl md:text-2xl font-bold text-blue-700">KABUPATEN LUMAJANG</span>
+  </div>
+
+  <div class="hidden md:flex space-x-6 items-center relative">
+    <a href="{{ url_for('main.home') }}" class="text-gray-700 hover:text-blue-600 font-medium text-md">Beranda</a>
+
+    <!-- Informasi Publik -->
+    <div class="dropdown relative">
+      <button type="button" class="dropdown-toggle flex items-center text-gray-700 hover:text-blue-600 font-medium focus:outline-none text-md">
+        Informasi Publik
+        <svg class="ml-1 w-4 h-4 fill-current" viewBox="0 0 20 20">
+          <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+        </svg>
+      </button>
+      <div class="dropdown-content mt-1 rounded-lg shadow-lg">
+        <a href="{{ url_for('main.syarat') }}" class="block px-4 py-2 hover:bg-blue-50 text-md">Syarat & Ketentuan</a>
+        <a href="{{ url_for('main.transparansi') }}" class="block px-4 py-2 hover:bg-blue-50 text-md">Transparansi Donasi</a>
+        <a href="{{ url_for('main.riwayat') }}" class="block px-4 py-2 hover:bg-blue-50 text-md">Riwayat Transparansi</a>
+      </div>
+    </div>
+
+    <a href="{{ url_for('main.perpusdes') }}" class="text-gray-700 hover:text-blue-600 font-medium text-md">Perpusdes</a>
+    <a href="{{ url_for('main.panduan_donasi') }}" class="text-blue-700 hover:text-blue-600 font-semibold text-md">Panduan Donasi</a>
+
+    <!-- Tentang Kami -->
+    <div class="dropdown relative">
+      <button class="dropdown-toggle flex items-center text-gray-700 hover:text-blue-600 font-medium focus:outline-none text-md">
+        Tentang Kami
+        <svg class="ml-1 w-4 h-4 fill-current" viewBox="0 0 20 20">
+          <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+        </svg>
+      </button>
+      <div class="dropdown-content absolute mt-1 shadow-lg">
+        <a href="{{ url_for('main.faq') }}" class="text-md">FAQ</a>
+        <a href="{{ url_for('main.kontak') }}" class="text-md">Kontak Kami</a>
+        <a href="{{ url_for('main.profil') }}" class="text-md">Profil</a>
+      </div>
+    </div>
+
+    <!-- Login/Profile -->
+    {% if session.get('user_id') %}
+    <div class="dropdown relative ml-4">
+      <button class="dropdown-toggle flex items-center space-x-2 bg-white border border-gray-300 px-3 py-1 rounded hover:bg-gray-50">
+        <img src="{{ url_for('static', filename='images/profile.png') }}" alt="Profile" class="w-6 h-6 rounded-full">
+        <span class="text-sm text-gray-700">{{ session['nama'] }}</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div class="dropdown-content absolute mt-1 shadow-lg">
+        <a href="{{ url_for('main.logout') }}" class="text-red-500">Logout</a>
+      </div>
+    </div>
+    {% else %}
+    <a href="{{ url_for('main.login') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Login</a>
+    {% endif %}
+  </div>
+</nav>
+
+<!-- HEADER -->
+<div class="bg-gray-200 py-10 text-center shadow">
+  <h1 class="text-3xl font-bold text-gray-700">PANDUAN DONASI</h1>
+  <p class="mt-1 text-md text-gray-600">Perpustakaan Desa Kabupaten Lumajang</p>
+</div>
+
+<!-- KONTEN -->
+<div class="max-w-7xl mx-auto px-4 py-10">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    
+    <!-- Langkah 1 -->
+    <div class="bg-white shadow-md rounded-lg p-5 border-t-4 border-blue-500">
+      <h3 class="text-xl font-bold text-blue-700 mb-2">1. Masuk ke Website</h3>
+      <p class="text-sm">Buka laman resmi website donasi buku untuk Perpustakaan Desa Lumajang melalui perangkat Anda.</p>
+    </div>
+
+    <!-- Langkah 2 -->
+    <div class="bg-white shadow-md rounded-lg p-5 border-t-4 border-blue-500">
+      <h3 class="text-xl font-bold text-blue-700 mb-2">2. Pilih Menu "Donasi Buku"</h3>
+      <p class="text-sm">Klik tombol <strong>DONASI</strong> dari menu utama untuk masuk ke halaman donasi.</p>
+    </div>
+
+    <!-- Langkah 3 -->
+    <div class="bg-white shadow-md rounded-lg p-5 border-t-4 border-blue-500">
+      <h3 class="text-xl font-bold text-blue-700 mb-2">3. Buat Akun</h3>
+      <p class="text-sm">Lakukan pendaftaran akun atau login menggunakan metode yang tersedia seperti Email/Google.</p>
+    </div>
+
+    <!-- Langkah 4 -->
+    <div class="bg-white shadow-md rounded-lg p-5 border-t-4 border-blue-500">
+      <h3 class="text-xl font-bold text-blue-700 mb-2">4. DONASI SEKARANG</h3>
+      <p class="text-sm">Setelah login, klik menu DONASI SEKARANG untuk mengisi formulir dan mengunggah bukti pengiriman.</p>
+    </div>
+
+    <!-- Langkah 5 -->
+    <div class="bg-white shadow-md rounded-lg p-5 border-t-4 border-blue-500">
+      <h3 class="text-xl font-bold text-blue-700 mb-2">5. Formulir Donasi</h3>
+      <p class="text-sm">Lengkapi formulir donasi dan pastikan data buku dan pengiriman sudah sesuai.</p>
+    </div>
+
+    <!-- Langkah 6 -->
+    <div class="bg-white shadow-md rounded-lg p-5 border-t-4 border-blue-500">
+      <h3 class="text-xl font-bold text-blue-700 mb-2">6. Donasi Sukses</h3>
+      <p class="text-sm">Setelah konfirmasi berhasil, Anda akan mendapatkan bukti donasi resmi berupa dokumen PDF.</p>
+    </div>
+
+    <!-- Langkah 7 -->
+    <div class="bg-white shadow-md rounded-lg p-5 border-t-4 border-blue-500">
+      <h3 class="text-xl font-bold text-blue-700 mb-2">7. Menunggu Verifikasi</h3>
+      <p class="text-sm">Tunggu verifikasi dari tim kami. Sertifikat donasi akan dikirim ke email Anda.</p>
+    </div>
+  </div>
+
+  <!-- Tombol Kembali -->
+  <div class="text-center mt-10">
+    <a href="{{ url_for('main.home') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium shadow">← Kembali ke Beranda</a>
+  </div>
+</div>
+
+</body>
+</html>

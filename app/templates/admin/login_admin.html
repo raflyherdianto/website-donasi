@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Admin Perpustakaan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-900 text-white py-4 shadow">
+    <div class="container mx-auto px-6 flex justify-between items-center">
+      <h1 class="text-2xl font-bold tracking-wide"> Donasi Buku Lumajang</h1>
+      <div>
+        <span class="mr-4 hidden sm:inline">Admin Perpustakaan</span>
+        <a href="/logout-admin" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded shadow transition-all">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+    <div class="bg-white w-full max-w-md p-8 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Masuk Admin Perpustakaan</h2>
+      <form method="POST" action="{{ url_for('main.login_admin') }}">
+        <div class="mb-4">
+          <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+          <input type="text" id="username" name="username" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="mb-6">
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <input type="password" id="password" name="password" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition duration-300">
+          Masuk
+        </button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
