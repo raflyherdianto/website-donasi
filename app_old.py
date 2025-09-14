@@ -507,10 +507,12 @@ def login_admin():
         username = request.form['username']
         password = request.form['password']
 
-        admin = AdminPerpus.query.filter_by(username=username).first()
-        if admin and admin.check_password(password):
-            session['admin_id'] = admin.id
-            session['nama'] = admin.nama_perpus  # ✅ Tambahkan ini
+        user = User.query.filter_by(username=username, role='admin').first()
+        if user and user.is_verified and check_password_hash(user.password, password):
+            session['admin_id'] = user.id
+            if user.perpus:
+                session['nama_perpus'] = user.perpus.nama
+                session['perpus_id'] = user.perpus.id
             return redirect(url_for('dashboard_admin'))
         else:
             flash('Login gagal. Username atau password salah.')

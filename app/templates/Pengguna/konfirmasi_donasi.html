@@ -1,122 +1,161 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Konfirmasi Donasi Buku</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-    textarea:focus {
-      outline: none;
-    }
-  </style>
-</head>
-<body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen flex flex-col">
+{% extends "pengguna/base_public.html" %}
 
-  <!-- NAVBAR -->
-  <nav class="bg-blue-200 shadow-md px-8 py-4 flex justify-between items-center sticky top-0 z-40">
-    <div class="flex items-center space-x-4">
-      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="w-10 h-10">
-      <span class="text-xl font-bold text-blue-700">Kabupaten Lumajang</span>
-    </div>
-    <div>
-      {% if session.get('user_id') %}
-      <span class="text-sm text-gray-600 mr-4">Halo, {{ session['nama'] }}</span>
-      <a href="{{ url_for('main.logout') }}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm">Logout</a>
-      {% else %}
-      <a href="{{ url_for('main.login') }}" class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 text-sm font-semibold transition">Login</a>
-      {% endif %}
-    </div>
-  </nav>
+{% block title %}Konfirmasi Donasi Buku{% endblock %}
 
-  <!-- ISI UTAMA -->
-  <div class="flex-grow px-6 py-10 flex justify-center">
-    <div class="w-full max-w-5xl bg-white p-10 shadow-2xl rounded-xl">
-      
-      <!-- Logo dan Header -->
-      <div class="flex flex-col md:flex-row items-center mb-6 gap-4">
-        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="w-24 h-24">
-        <div class="text-center md:text-left">
-          <h1 class="text-2xl font-bold text-gray-800 leading-snug">
-            DINAS KEARSIPAN DAN PERPUSTAKAAN<br>KABUPATEN LUMAJANG
-          </h1>
-          <p class="text-sm text-gray-600 italic mt-1">
-            Bersama kita wujudkan pemerataan literasi di seluruh pelosok desa Kabupaten Lumajang melalui donasi buku yang bermanfaat dan tepat sasaran.
-          </p>
+{% block extra_head %}
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+  }
+  textarea:focus {
+    outline: none;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- ISI UTAMA -->
+<div class="container mx-auto px-4 py-10">
+  <div class="w-full max-w-5xl mx-auto bg-white p-10 shadow-xl rounded-xl">
+
+    <!-- Judul -->
+    <h2 class="text-3xl font-bold text-center text-blue-700 mb-4">Konfirmasi Donasi Buku</h2>
+    <p class="text-sm text-gray-700 text-center mb-6">
+      Lengkapi informasi berikut untuk mengonfirmasi pengiriman buku donasi Anda.
+    </p>
+
+    <!-- Informasi Penting -->
+    <div class="bg-gray-50 border border-gray-300 p-4 rounded mb-6 text-sm text-gray-700">
+      <p class="font-semibold mb-2">Informasi Penting:</p>
+      <ul class="list-disc ml-5 space-y-1">
+        <li>Buku dikirim secara mandiri ke alamat resmi Dinas Kearsipan dan Perpustakaan Kabupaten Lumajang.</li>
+        <li>Unggah bukti pengiriman maksimal <strong>2 x 24 jam</strong> setelah mengisi formulir donasi.</li>
+        <li>Sertifikat akan dikirim ke email setelah donasi diterima dan diverifikasi oleh tim Dinas.</li>
+      </ul>
+    </div>
+
+    <!-- Alamat Pengiriman -->
+    <div class="mb-6">
+      <label class="block font-semibold text-sm text-gray-800 mb-2">Alamat Pengiriman :</label>
+      <div class="relative bg-gray-100 rounded-md p-4 text-sm text-gray-800 border border-gray-300">
+        <textarea id="alamat" readonly class="w-full bg-transparent resize-none leading-relaxed">Jl. Hayam Wuruk No.1, Kepuharjo, Kec. Lumajang, Kabupaten Lumajang, Jawa Timur 67316</textarea>
+        <button onclick="salinAlamat()" class="absolute top-2 right-2 text-blue-600 hover:text-blue-800 text-xs underline">Salin</button>
+      </div>
+    </div>
+
+    <!-- Form Konfirmasi -->
+    <form action="{{ url_for('public.konfirmasi_donasi', invoice=donasi.invoice) }}" method="POST" enctype="multipart/form-data">
+      <!-- Unggah Bukti Resi Pengiriman -->
+      <div class="mb-4">
+        <label class="block font-semibold text-sm text-gray-800 mb-1">
+          Unggah Bukti Resi Pengiriman <span class="text-red-600">*</span>
+        </label>
+        <p class="text-xs text-gray-600 mb-2">Format file yang diizinkan: JPG, JPEG, PNG</p>
+        <input id="bukti_resi_input" type="file" name="bukti_resi" accept=".jpg,.jpeg,.png" required class="w-full px-4 py-2 border rounded bg-white shadow-sm">
+        <div class="mt-4 flex justify-center">
+          <img
+            id="preview-img"
+            class="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg object-contain rounded shadow-lg"
+            style="display: none"
+            alt="Preview Bukti Resi"
+          >
         </div>
       </div>
 
-      <!-- Garis Pembatas -->
-      <hr class="border-t-2 border-gray-300 my-6">
-
-      <!-- Judul -->
-      <h2 class="text-3xl font-bold text-center text-blue-700 mb-4">Konfirmasi Donasi Buku</h2>
-      <p class="text-sm text-gray-700 text-center mb-6">
-        Langkah terakhir, mohon lengkapi informasi di bawah ini sebagai konfirmasi pengiriman buku donasi Anda.
-      </p>
-
-      <!-- Informasi Penting -->
-      <div class="bg-gray-50 border border-gray-300 p-4 rounded mb-6 text-sm text-gray-700">
-        <p class="font-semibold mb-2">Informasi Penting:</p>
-        <ul class="list-disc ml-5 space-y-1">
-          <li>Buku dikirim secara mandiri ke alamat resmi Dinas Kearsipan dan Perpustakaan Kabupaten Lumajang.</li>
-          <li>Unggah bukti pengiriman maksimal <strong>2 x 24 jam</strong> setelah mengisi formulir donasi.</li>
-          <li>Sertifikat akan dikirim melalui email setelah verifikasi dari tim Dinas.</li>
-        </ul>
+      <!-- Unggah Sampul Buku -->
+      <div class="mb-4">
+        <label class="block font-semibold text-sm text-gray-800 mb-1">
+          Unggah Sampul Buku <span class="text-red-600">*</span>
+        </label>
+        <p class="text-xs text-gray-600 mb-2">Format file yang diizinkan: JPG, JPEG, PNG</p>
+        <input id="sampul_buku_input" type="file" name="sampul_buku" accept=".jpg,.jpeg,.png" required class="w-full px-4 py-2 border rounded bg-white shadow-sm">
+        <div class="mt-4 flex justify-center">
+          <img
+            id="preview-sampul"
+            class="w-full max-w-xs object-contain rounded shadow-lg"
+            style="display: none"
+            alt="Preview Sampul Buku"
+          >
+        </div>
       </div>
 
-      <!-- Alamat Pengiriman -->
+      <!-- Tanggal Pengiriman -->
       <div class="mb-6">
-        <label class="block font-semibold text-sm text-gray-800 mb-2">Alamat Pengiriman :</label>
-        <div class="relative bg-gray-100 rounded-md p-4 text-sm text-gray-800 border border-gray-300">
-          <textarea id="alamat" readonly class="w-full bg-transparent resize-none leading-relaxed">Jl. Hayam Wuruk No.1, Kepuharjo, Kec. Lumajang, Kabupaten Lumajang, Jawa Timur 67316</textarea>
-          <button onclick="salinAlamat()" class="absolute top-2 right-2 text-blue-600 hover:text-blue-800 text-xs underline">Salin</button>
-        </div>
+        <label class="block font-semibold text-sm text-gray-800 mb-1">
+          Tanggal Pengiriman <span class="text-red-600">*</span>
+        </label>
+        <input type="date" name="tanggal_pengiriman" required class="w-full px-4 py-2 border rounded bg-white shadow-sm">
       </div>
 
-      <!-- Form Konfirmasi -->
-      <form action="{{ url_for('konfirmasi_donasi', id=donasi.id) }}" method="POST" enctype="multipart/form-data">
-        <!-- Bukti Resi -->
-        <div class="mb-4">
-          <label class="block font-semibold text-sm text-gray-800 mb-1">
-            Unggah Bukti Resi Pengiriman <span class="text-red-600">*</span>
-          </label>
-          <input type="file" name="bukti_resi" required class="w-full px-4 py-2 border rounded bg-white shadow-sm">
-        </div>
+      <!-- Tombol Submit -->
+      <div class="flex justify-between">
+        <button id="cancel-btn" type="button" class="bg-red-500 text-white px-8 py-3 rounded shadow hover:bg-red-600 font-semibold">
+          Batalkan
+        </button>
+        <button type="submit" class="bg-green-600 text-white px-8 py-3 rounded shadow hover:bg-green-700">
+          Kirim Sekarang
+        </button>
+      </div>
+    </form>
 
-        <!-- Tanggal Pengiriman -->
-        <div class="mb-6">
-          <label class="block font-semibold text-sm text-gray-800 mb-1">
-            Tanggal Pengiriman <span class="text-red-600">*</span>
-          </label>
-          <input type="date" name="tanggal_pengiriman" required class="w-full px-4 py-2 border rounded bg-white shadow-sm">
-        </div>
-
-        <!-- Tombol Submit -->
-        <div class="text-center">
-          <button type="submit" class="bg-green-600 text-white px-8 py-3 rounded shadow hover:bg-green-700 transition duration-200 font-semibold">
-            Kirim Sekarang
-          </button>
-        </div>
-      </form>
-
-    </div>
   </div>
+</div>
+{% endblock %}
 
-  <!-- SCRIPT -->
-  <script>
-    function salinAlamat() {
-      const alamat = document.getElementById("alamat");
-      alamat.select();
-      alamat.setSelectionRange(0, 99999);
-      document.execCommand("copy");
-      alert("Alamat berhasil disalin!");
+{% block extra_js %}
+<script>
+  function salinAlamat() {
+    const alamat = document.getElementById("alamat");
+    alamat.select();
+    alamat.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    showToast("Alamat berhasil disalin!", "success");
+  }
+
+  // Batalkan modal
+  const cancelBtn = document.getElementById('cancel-btn');
+  const modal = document.createElement('div');
+  modal.innerHTML = `
+    <div id="cancel-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm">
+        <h3 class="text-lg font-bold mb-4">Apakah yakin ingin membatalkan donasi?</h3>
+        <div class="flex justify-end space-x-4">
+          <button id="cancel-no" class="px-4 py-2 rounded bg-gray-300">Tidak</button>
+          <button id="cancel-yes" class="px-4 py-2 rounded bg-red-500 text-white">Ya</button>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  modal.style.display = 'none';
+
+  cancelBtn.addEventListener('click', () => modal.style.display = 'flex');
+  document.getElementById('cancel-no').addEventListener('click', () => modal.style.display = 'none');
+  document.getElementById('cancel-yes').addEventListener('click', () => {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = "{{ url_for('public.batal_donasi', invoice=donasi.invoice) }}";
+    document.body.appendChild(form);
+    form.submit();
+  });
+
+  // Preview Bukti Resi
+  document.getElementById('bukti_resi_input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const preview = document.getElementById('preview-img');
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
     }
-  </script>
+  });
 
-</body>
-</html>
+  // Preview Sampul Buku
+  document.getElementById('sampul_buku_input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const preview = document.getElementById('preview-sampul');
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+    }
+  });
+</script>
+{% endblock %}

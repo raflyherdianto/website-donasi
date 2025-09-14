@@ -1,143 +1,50 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Profil Pengembang</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-            z-index: 1;
-            top: 100%;
-            left: 0;
-        }
+{% extends "pengguna/base_public.html" %}
+{% from "pengguna/content_wrapper.html" import content_container, card, grid_container %}
 
-        .dropdown.show .dropdown-content {
-            display: block;
-        }
+{% block title %}Profil Pengembang{% endblock %}
 
-        .dropdown-content a {
-            display: block;
-            padding: 10px;
-            color: black;
-            text-decoration: none;
-        }
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-[#21587C] text-white text-center py-12 sm:py-16 px-4">
+    {% call content_container("6xl", "px-0 py-0") %}
+        <h1 class="text-3xl sm:text-4xl font-bold mb-6">Profil Pengembang</h1>
+        <p class="mb-10 max-w-4xl mx-auto text-sm sm:text-base leading-relaxed">
+            Website ini dikembangkan oleh Salma Acacia Prasasta, mahasiswa Universitas Negeri Malang, Program Studi D4 Perpustakaan Digital.
+            Pengembangan ini sebagai bagian dari Tugas Akhir dengan arahan dan bimbingan dari Ibu Lidya Amalia Rahmania, S.Kom, M.Kom.
+        </p>
 
-        .dropdown-content a:hover {
-            background-color: #ececec;
-        }
-    </style>
-</head>
+        {% call grid_container("grid-cols-1 md:grid-cols-2", "gap-8 lg:gap-12") %}
+            <!-- Pembimbing -->
+            {% call card(class="bg-transparent text-white text-center") %}
+                <h2 class="font-bold text-xl mb-4">Pembimbing</h2>
+                <div class="w-48 h-48 mx-auto bg-white rounded-lg overflow-hidden flex items-center justify-center shadow-lg mb-4">
+                    <img src="{{ url_for('static', filename='images/pembimbing.jpg') }}" alt="Pembimbing" class="w-50 h-full object-cover">
+                </div>
+                <div class="text-sm sm:text-base leading-relaxed">
+                    <p class="font-semibold mb-2">Lidya Amalia Rahmania, S.Kom, M.Kom.</p>
+                    <p>Program Studi D4 Perpustakaan Digital</p>
+                    <p>Universitas Negeri Malang</p>
+                    <p class="mt-2 text-blue-200">lidya.amalia.fs@um.ac.id</p>
+                </div>
+            {% endcall %}
 
-<body class="bg-gray-100 min-h-screen">
-
-<!-- NAVBAR -->
-<nav class="bg-blue-200 shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-40">
-  <div class="flex items-center space-x-3">
-    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Kabupaten Lumajang" class="w-10 h-10">
-    <span class="text-xl md:text-2xl font-bold text-blue-700">KABUPATEN LUMAJANG</span>
-  </div>
-
-  <!-- Desktop Menu -->
-  <div class="hidden md:flex space-x-6 items-center">
-    <a href="{{ url_for('main.home') }}" class="text-blue-700 hover:text-blue-600 font-semibold">Beranda</a>
-
-    <!-- Informasi Publik -->
-    <div class="dropdown relative">
-      <button type="button" class="dropdown-toggle flex items-center text-gray-700 hover:text-blue-600 font-medium focus:outline-none">
-        Informasi Publik
-        <svg class="ml-1 w-4 h-4 fill-current" viewBox="0 0 20 20">
-          <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-        </svg>
-      </button>
-      <div class="dropdown-content mt-1 rounded-lg shadow-lg">
-        <a href="{{ url_for('main.syarat') }}" class="block px-4 py-2 hover:bg-blue-50">Syarat & Ketentuan</a>
-        <a href="{{ url_for('main.transparansi') }}" class="block px-4 py-2 hover:bg-blue-50">Transparansi Donasi</a>
-        <a href="{{ url_for('main.riwayat') }}" class="block px-4 py-2 hover:bg-blue-50">Riwayat Transparansi</a>
-      </div>
-    </div>
-
-    <a href="{{ url_for('main.perpusdes') }}" class="text-gray-700 hover:text-blue-600 font-medium">Perpusdes</a>
-    <a href="{{ url_for('main.panduan_donasi') }}" class="text-gray-700 hover:text-blue-600 font-medium">Panduan Donasi</a>
-
-    <!-- Tentang Kami -->
-    <div class="dropdown relative">
-      <button type="button" class="dropdown-toggle flex items-center text-gray-700 hover:text-blue-600 font-medium focus:outline-none">
-        Tentang Kami
-        <svg class="ml-1 w-4 h-4 fill-current" viewBox="0 0 20 20">
-          <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-        </svg>
-      </button>
-      <div class="dropdown-content mt-1 rounded-lg shadow-lg">
-        <a href="{{ url_for('main.faq') }}" class="block px-4 py-2 hover:bg-blue-50">FAQ</a>
-        <a href="{{ url_for('main.kontak') }}" class="block px-4 py-2 hover:bg-blue-50">Kontak Kami</a>
-        <a href="{{ url_for('main.profil') }}" class="block px-4 py-2 hover:bg-blue-50">Profil</a>
-      </div>
-    </div>
-
-    <!-- Login/Profile -->
-    {% if session.get('user_id') %}
-    <div class="dropdown relative ml-4">
-      <button class="dropdown-toggle flex items-center space-x-2 bg-white border border-gray-300 px-3 py-1 rounded hover:bg-gray-50">
-        <img src="{{ url_for('static', filename='images/profile.png') }}" alt="Profile" class="w-6 h-6 rounded-full">
-        <span class="text-sm text-gray-700">{{ session['nama'] }}</span>
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
-      <div class="dropdown-content mt-1 rounded-lg shadow-lg">
-        <a href="{{ url_for('main.logout') }}" class="block px-4 py-2 text-red-500 hover:bg-gray-100">Logout</a>
-      </div>
-    </div>
-    {% else %}
-    <a href="{{ url_for('main.login') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Login</a>
-    {% endif %}
-  </div>
-</nav>
-
-<!-- Konten Profil -->
-<div class="bg-[#21587C] text-white text-center py-12 px-4">
-    <h1 class="text-3xl font-bold mb-6">Profil Pengembang</h1>
-    <p class="mb-10 max-w-4xl mx-auto">
-        Website ini dikembangkan oleh Salma Acacia Prasasta, mahasiswa Universitas Negeri Malang, Program Studi D4 Perpustakaan Digital.
-        Pengembangan ini sebagai bagian dari Tugas Akhir dengan arahan dan bimbingan dari Ibu Lidya Amalia Rahmania, S.Kom, M.Kom.
-    </p>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto px-4">
-        <!-- Pembimbing -->
-        <div class="text-center">
-            <h2 class="font-bold text-xl mb-2">Pembimbing</h2>
-            <div class="w-48 h-48 mx-auto bg-white rounded overflow-hidden flex items-center justify-center">
-                <img src="{{ url_for('static', filename='images/pembimbing.jpg') }}" alt="Pembimbing" class="w-full h-full object-cover">
-            </div>
-            <p class="mt-4 leading-relaxed">
-                Lidya Amalia Rahmania, S.Kom, M.Kom.<br>
-                Program Studi D4 Perpustakaan Digital<br>
-                Universitas Negeri Malang<br>
-                lidya.amalia.fs@um.ac.id
-            </p>
-        </div>
-
-        <!-- Penulis -->
-        <div class="text-center">
-            <h2 class="font-bold text-xl mb-2">Penulis</h2>
-            <div class="w-48 h-48 mx-auto bg-white rounded overflow-hidden flex items-center justify-center">
-                <img src="{{ url_for('static', filename='images/penulis.jpg') }}" alt="Penulis" class="w-full h-full object-cover">
-            </div>
-            <p class="mt-4 leading-relaxed">
-                Salma Acacia Prasasta<br>
-                Program Studi D4 Perpustakaan Digital<br>
-                Universitas Negeri Malang<br>
-                Salma.acacia.2102135@students.um.ac.id
-            </p>
-        </div>
-    </div>
+            <!-- Penulis -->
+            {% call card(class="bg-transparent text-white text-center") %}
+                <h2 class="font-bold text-xl mb-4">Pengembang</h2>
+                <div class="w-48 h-48 mx-auto bg-white rounded-lg overflow-hidden flex items-center justify-center shadow-lg mb-4">
+                    <img src="{{ url_for('static', filename='images/pengembang.jpg') }}" alt="Penulis" class="w-full h-full object-cover">
+                </div>
+                <div class="text-sm sm:text-base leading-relaxed">
+                    <p class="font-semibold mb-2">Salma Acacia Prasasta</p>
+                    <p>Program Studi D4 Perpustakaan Digital</p>
+                    <p>Universitas Negeri Malang</p>
+                    <p class="mt-2 text-blue-200 break-all">Salma.acacia.2102135@students.um.ac.id</p>
+                </div>
+            {% endcall %}
+        {% endcall %}
+    {% endcall %}
 </div>
+{% endblock %}
 
 <!-- Script Dropdown -->
 <script>

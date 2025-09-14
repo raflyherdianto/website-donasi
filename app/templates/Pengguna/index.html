@@ -4,22 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Donasi Buku Perpustakaan Desa</title>
-  <script src="https://cdn.tailwindcss.com "></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo2.png') }}">
   <style>
     .dropdown-content {
       display: none;
       position: absolute;
       background-color: #ffffff;
       min-width: 160px;
+      max-width: 200px;
       box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
       z-index: 50;
       top: 100%;
-      left: 0;
+      right: 0;
       border-radius: 8px;
       overflow: hidden;
       transition: opacity 0.2s ease-in-out;
+      border: 1px solid #e5e7eb;
     }
+    
+    @media (max-width: 768px) {
+      .dropdown-content {
+        min-width: 140px;
+        right: -10px;
+      }
+    }
+    
     .show-dropdown {
       display: block !important;
       animation: fadeIn 0.2s ease-in-out;
@@ -32,165 +44,131 @@
 
     .dropdown-content a {
       display: block;
-      padding: 10px 16px;
+      padding: 12px 16px;
       color: #1e293b;
       text-decoration: none;
       transition: background 0.2s ease-in-out;
+      white-space: nowrap;
+      font-size: 14px;
     }
 
     .dropdown-content a:hover {
       background-color: #f1f5f9;
     }
+    
+    .profile-dropdown {
+      right: 0;
+      left: auto;
+    }
   </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-<!-- NAVBAR -->
-<nav class="bg-blue-200 shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-40">
-  <div class="flex items-center space-x-3">
-    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo Kabupaten Lumajang" class="w-10 h-10">
-    <span class="text-xl md:text-2xl font-bold text-blue-700">KABUPATEN LUMAJANG</span>
-  </div>
+<!-- Toast Container -->
+<div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
-  <!-- Desktop Menu -->
-  <div class="hidden md:flex space-x-6 items-center">
-    <a href="/" class="text-blue-700 hover:text-blue-600 font-semibold">Beranda</a>
+{% extends "pengguna/base_public.html" %}
+{% from "pengguna/content_wrapper.html" import hero_section, content_container, grid_container, news_card %}
 
-    <!-- Informasi Publik -->
-    <div class="relative group">
-      <button type="button" onclick="toggleDropdown(event, 'infoDropdown')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium focus:outline-none">
-        Informasi Publik
-        <svg class="ml-1 w-4 h-4 fill-current" viewBox="0 0 20 20">
-          <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" fill-rule="evenodd"></path>
-        </svg>
-      </button>
-      <div id="infoDropdown" class="dropdown-content mt-1 rounded-lg shadow-lg">
-        <a href="/syarat" class="block px-4 py-2 hover:bg-blue-50">Syarat & Ketentuan</a>
-        <a href="/transparansi" class="block px-4 py-2 hover:bg-blue-50">Transparansi Donasi</a>
-        <a href="/riwayat" class="block px-4 py-2 hover:bg-blue-50">Riwayat Transparansi</a>
-      </div>
-    </div>
+{% block title %}Donasi Buku Perpustakaan Desa - Kabupaten Lumajang{% endblock %}
 
-    <a href="/perpusdes" class="text-gray-700 hover:text-blue-600 font-medium">Perpusdes</a>
-    <a href="/panduan-donasi" class="text-gray-700 hover:text-blue-600 font-medium">Panduan Donasi</a>
-
-    <!-- Tentang Kami -->
-    <div class="relative group">
-      <button type="button" onclick="toggleDropdown(event, 'aboutDropdown')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium focus:outline-none">
-        Tentang Kami
-        <svg class="ml-1 w-4 h-4 fill-current" viewBox="0 0 20 20">
-          <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" fill-rule="evenodd"></path>
-        </svg>
-      </button>
-      <div id="aboutDropdown" class="dropdown-content mt-1 rounded-lg shadow-lg">
-        <a href="/faq" class="block px-4 py-2 hover:bg-blue-50">FAQ</a>
-        <a href="/kontak" class="block px-4 py-2 hover:bg-blue-50">Kontak Kami</a>
-        <a href="/profil" class="block px-4 py-2 hover:bg-blue-50">Profil</a>
-      </div>
-    </div>
-
-    <!-- User Login / Logout -->
-    {% if session.get('user_id') %}
-    <div class="relative ml-4">
-      <button onclick="toggleDropdown(event, 'profileDropdown')" class="flex items-center space-x-2 bg-white border border-gray-300 px-3 py-1 rounded hover:bg-gray-50 transition">
-        <img src="{{ url_for('static', filename='images/profile.png') }}" alt="Profile" class="w-6 h-6 rounded-full">
-        <span class="text-sm font-medium text-gray-700">{{ session['nama'] }}</span>
-        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
-      <div id="profileDropdown" class="dropdown-content mt-1 rounded-lg shadow-lg">
-        <a href="{{ url_for('main.logout') }}" class="flex items-center px-4 py-2 text-red-500 hover:bg-gray-100">
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-          Logout
-        </a>
-      </div>
-    </div>
-    {% else %}
-    <a href="{{ url_for('main.login') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200">
-      Login
-    </a>
-    {% endif %}
-  </div>
-
-  <!-- Mobile Hamburger Button -->
-  <div class="md:hidden flex items-center">
-    <button onclick="toggleMobileMenu()" class="text-gray-700 focus:outline-none">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
-    </button>
-  </div>
-</nav>
-
-<!-- Mobile Menu -->
-<div id="mobile-menu" class="hidden md:hidden bg-white shadow-md p-4 space-y-2">
-  <a href="/" class="block text-gray-700 hover:text-blue-600">Beranda</a>
-  <details class="group">
-    <summary class="flex justify-between items-center cursor-pointer text-gray-700 hover:text-blue-600">
-      Informasi Publik
-      <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-      </svg>
-    </summary>
-    <div class="mt-2 pl-4 space-y-1">
-      <a href="/syarat" class="block text-sm text-gray-600 hover:text-blue-600">Syarat & Ketentuan</a>
-      <a href="/transparansi" class="block text-sm text-gray-600 hover:text-blue-600">Transparansi Donasi</a>
-      <a href="/riwayat" class="block text-sm text-gray-600 hover:text-blue-600">Riwayat Transparansi</a>
-    </div>
-  </details>
-  <a href="/perpusdes" class="block text-gray-700 hover:text-blue-600">Perpusdes</a>
-  <a href="/panduan-donasi" class="block text-gray-700 hover:text-blue-600">Panduan Donasi</a>
-  <details class="group">
-    <summary class="flex justify-between items-center cursor-pointer text-gray-700 hover:text-blue-600">
-      Tentang Kami
-      <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-      </svg>
-    </summary>
-    <div class="mt-2 pl-4 space-y-1">
-      <a href="/faq" class="block text-sm text-gray-600 hover:text-blue-600">FAQ</a>
-      <a href="/kontak" class="block text-sm text-gray-600 hover:text-blue-600">Kontak Kami</a>
-      <a href="/profil" class="block text-sm text-gray-600 hover:text-blue-600">Profil</a>
-    </div>
-  </details>
-  {% if session.get('user_id') %}
-  <a href="{{ url_for('main.logout') }}" class="block text-red-500 hover:bg-red-50 px-2 py-1 rounded">Logout</a>
-  {% else %}
-  <a href="{{ url_for('main.login') }}" class="block text-blue-600 hover:bg-blue-50 px-2 py-1 rounded">Login</a>
-  {% endif %}
-</div>
-
+{% block content %}
 <!-- Hero Section -->
-<section class="relative bg-cover bg-center h-64 md:h-96" style="background-image: url('{{ url_for('static', filename='images/library.jpg') }}');">
-  <div class="absolute inset-0 bg-black opacity-50"></div>
-  <div class="container mx-auto px-6 relative flex flex-col items-center justify-center h-full">
-    <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">Donasi Buku Perpudes</h1>
-    <p class="text-lg text-white mb-6 text-center">"Donasikan buku Anda, hidupkan literasi di perpustakaan desa. Bersama kita maju bersama."</p>
-    <a href="{{ url_for('main.formulir_donasi') }}" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300">
-      DONASI
-    </a>
-  </div>
-</section>
+{{ hero_section(
+    "Donasi Buku Perpusdes", 
+    "\"Donasikan buku Anda, hidupkan literasi di perpustakaan desa. Bersama kita maju bersama.\"",
+    url_for('static', filename='images/library.jpg'),
+    "DONASI",
+    url_for('public.formulir_donasi')
+) }}
 
 <!-- News Section -->
-<section class="py-10 bg-white">
-  <div class="container mx-auto px-6">
-    <h2 class="text-3xl font-bold text-center mb-8">BERITA</h2>
-    <div class="flex overflow-x-auto scroll-smooth space-x-4">
-      <div class="w-64 flex-shrink-0">
-        <img src="{{ url_for('static', filename='images/desa_tempeh.jpg') }}" alt="Desa Tempeh" class="w-full h-40 object-cover rounded-lg">
-        <div class="mt-2 text-center">
-          <a href="#" class="block text-lg font-medium">Desa Tempeh</a>
-        </div>
-      </div>
-    </div>
-  </div>
+<section class="py-12 sm:py-16 bg-white">
+    {% call content_container() %}
+        <h2 class="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12 text-gray-800">BERITA TERKINI</h2>
+        
+        {% if latest_news %}
+            {% call grid_container("grid-cols-1 sm:grid-cols-2 lg:grid-cols-3", "gap-6 sm:gap-8") %}
+                {% for news in latest_news %}
+                    {{ news_card(news) }}
+                {% endfor %}
+            {% endcall %}
+            
+            <!-- View All News Button -->
+            <div class="text-center mt-8 sm:mt-12">
+                <a href="{{ url_for('public.semua_berita') }}" class="bg-blue-600 text-white px-6 sm:px-8 py-3 rounded-lg hover:bg-blue-700 transition duration-300 font-semibold text-sm sm:text-base">
+                    Lihat Semua Berita
+                </a>
+            </div>
+        {% else %}
+            <!-- No News Available -->
+            <div class="text-center py-16">
+                <div class="mx-auto w-24 h-24 mb-6 text-gray-300">
+                    <i class="fas fa-newspaper text-6xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-600 mb-2">Belum Ada Berita</h3>
+                <p class="text-gray-500">Berita tentang kegiatan perpustakaan akan ditampilkan di sini.</p>
+            </div>
+        {% endif %}
+    {% endcall %}
 </section>
+{% endblock %}
 
 <script>
+  // Toast Notification System
+  function showToast(message, type = 'info', duration = 4000) {
+    const toastContainer = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    
+    const typeClasses = {
+      'success': 'bg-green-500 text-white',
+      'error': 'bg-red-500 text-white',
+      'warning': 'bg-yellow-500 text-white',
+      'info': 'bg-blue-500 text-white'
+    };
+    
+    toast.className = `${typeClasses[type]} px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full opacity-0 max-w-sm`;
+    toast.innerHTML = `
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-medium">${message}</span>
+        <button onclick="closeToast(this)" class="ml-4 text-white hover:text-gray-200">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    `;
+    
+    toastContainer.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.classList.remove('translate-x-full', 'opacity-0');
+    }, 100);
+    
+    setTimeout(() => {
+      closeToast(toast.querySelector('button'));
+    }, duration);
+  }
+  
+  function closeToast(button) {
+    const toast = button.closest('div').parentElement;
+    toast.classList.add('translate-x-full', 'opacity-0');
+    setTimeout(() => {
+      if (toast.parentElement) {
+        toast.parentElement.removeChild(toast);
+      }
+    }, 300);
+  }
+
+  // Show flash messages as toasts
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        showToast('{{ message }}', '{{ category }}');
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
   function toggleDropdown(e, id) {
     e.preventDefault();
     const dropdown = document.getElementById(id);

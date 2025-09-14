@@ -1,74 +1,35 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Tambah Perpustakaan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 font-sans">
+{% extends "superadmin/base_superadmin.html" %}
+{% from "superadmin/content_wrapper.html" import page_header, card, form_group %}
 
-    <!-- Navbar -->
-    <nav class="bg-blue-800 text-white px-6 py-4 flex justify-between items-center shadow-lg">
-        <h1 class="text-xl font-bold">Donasi Buku Lumajang</h1>
-        <a href="/logout" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded">Logout</a>
-    </nav>
+{% block title %}Tambah Perpustakaan{% endblock %}
 
-    <div class="flex min-h-screen">
+{% block content %}
+{{ page_header("Form Tambah Perpustakaan", "Tambahkan perpustakaan desa baru ke dalam sistem.") }}
 
-        <!-- Sidebar -->
-        <aside class="w-72 bg-gray-900 text-white p-6">
-            <h2 class="text-xl font-semibold mb-4">Super Admin</h2>
-            <nav class="space-y-2">
-                <a href="/superadmin/dashboard" class="block hover:bg-blue-600 px-4 py-2 rounded">Dashboard</a>
-                <div>
-                    <p class="px-4 py-2">Manajemen Perpustakaan</p>
-                    <div class="ml-4 space-y-1">
-                        <a href="/tambah-perpustakaan" class="block px-4 py-1 bg-blue-700 rounded">Tambah Perpustakaan</a>
-                        <a href="/superadmin/perpusdes" class="block px-4 py-1 hover:bg-blue-500 rounded">Daftar Perpustakaan</a>
-                        <a href="/superadmin/verifikasi-admin" class="block px-4 py-1 hover:bg-blue-500 rounded">Verifikasi Admin</a>
-                    </div>
-                </div>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="flex-1 p-8">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Form Tambah Perpustakaan</h2>
-
-            <form method="POST" class="bg-white p-6 rounded shadow-md space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Nama Perpustakaan</label>
-                    <input type="text" name="nama_perpus" class="mt-1 block w-full border border-gray-300 rounded p-2" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Kecamatan</label>
-                    <input type="text" name="kecamatan" class="mt-1 block w-full border border-gray-300 rounded p-2" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Desa</label>
-                    <input type="text" name="desa" class="mt-1 block w-full border border-gray-300 rounded p-2" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Username</label>
-                    <input type="text" name="username" class="mt-1 block w-full border border-gray-300 rounded p-2" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" name="password" class="mt-1 block w-full border border-gray-300 rounded p-2" required>
-                </div>
-                <div>
-                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
-                </div>
-            </form>
-
-            {% with messages = get_flashed_messages() %}
-              {% if messages %}
-                <div class="mt-4 bg-green-100 text-green-800 px-4 py-2 rounded">
-                  {{ messages[0] }}
-                </div>
-              {% endif %}
-            {% endwith %}
-        </main>
-    </div>
-</body>
-</html>
+{% call card("Data Perpustakaan") %}
+    <form method="POST" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {{ form_group("Nama Perpustakaan", "nama_perpus", required=True, placeholder="Contoh: Perpustakaan Desa Sumberjo") }}
+            {{ form_group("Kecamatan", "kecamatan", required=True, placeholder="Contoh: Tempeh") }}
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {{ form_group("Desa", "desa", required=True, placeholder="Contoh: Sumberjo") }}
+            {{ form_group("Username", "username", required=True, placeholder="Username untuk login admin") }}
+        </div>
+        
+        {{ form_group("Password", "password", type="password", required=True, placeholder="Password minimal 6 karakter") }}
+        
+        <div class="flex flex-col sm:flex-row gap-4 pt-4">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded transition duration-200 flex items-center justify-center">
+                <i class="fas fa-save mr-2"></i>
+                Simpan Perpustakaan
+            </button>
+            <a href="{{ url_for('superadmin.daftar_perpustakaan') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded transition duration-200 flex items-center justify-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Kembali ke Daftar
+            </a>
+        </div>
+    </form>
+{% endcall %}
+{% endblock %}
